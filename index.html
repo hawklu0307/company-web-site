@@ -107,7 +107,15 @@
       font-size: 0.9rem;
     }
   </style>
+
+  <!-- ⭐️ 加入優化1：強制跳轉到 https + www ⭐️ -->
+  <script>
+    if (location.protocol !== 'https:' || !location.hostname.startsWith('www.')) {
+      location.href = 'https://www.stinger.com.tw' + location.pathname + location.search + location.hash;
+    }
+  </script>
 </head>
+
 <body>
 
   <button class="lang-toggle" onclick="toggleLanguage()">EN</button>
@@ -116,14 +124,14 @@
     <iframe
       src="https://www.youtube.com/embed/8KgyedANRTg?autoplay=1&mute=1&loop=1&playlist=8KgyedANRTg&controls=0&modestbranding=1&showinfo=0"
       frameborder="0"
-      allow="autoplay; fullscreen"
+      allow="autoplay; fullscreen; encrypted-media; picture-in-picture"
       allowfullscreen
     ></iframe>
 
     <div class="hero-overlay">
       <img src="logo.png" alt="Stinger Logo" class="hero-logo" />
       <h1 class="hero-title" id="hero-title">STINGER 無人機</h1>
-      <p class="hero-subtitle" id="hero-subtitle">高速影像傳輸．極致輕巧設計．次世代 5G NTN 技術</p>
+      <p class="hero-subtitle" id="hero-subtitle">高速影像傳輸．極致緊湊設計．次世代 5G NTN 技術</p>
       <button class="cta-button" id="cta-button">了解更多</button>
     </div>
   </section>
@@ -140,18 +148,9 @@
         subtitle: "高速影像傳輸．極致輕巧設計．次世代 5G NTN 技術",
         cta: "了解更多",
         features: [
-          {
-            title: "1080p H.265 圖傳",
-            desc: "即時高清畫面，延遲極低，無與倫比的飛行體驗。"
-          },
-          {
-            title: "Snapdragon X75 晶片",
-            desc: "支援 5G RedCap 與 NTN，穿透性與連線穩定性俱佳。"
-          },
-          {
-            title: "極簡緊湊設計",
-            desc: "輕巧可穿戴，專為專業任務打造的靈活平台。"
-          }
+          { title: "1080p H.265 圖傳", desc: "即時高清畫面，延遲極低，無與倫比的飛行體驗。" },
+          { title: "Snapdragon X75 晶片", desc: "支援 5G RedCap 與 NTN，穿透性與連線穩定性俱佳。" },
+          { title: "極簡緊湊設計", desc: "輕巧可穿戴，專為專業任務打造的靈活平台。" }
         ]
       },
       en: {
@@ -160,18 +159,9 @@
         subtitle: "Ultra-fast video transmission. Compact wearable design. Next-gen 5G NTN technology.",
         cta: "Learn More",
         features: [
-          {
-            title: "1080p H.265 Transmission",
-            desc: "Real-time HD visuals with ultra-low latency for an unmatched flight experience."
-          },
-          {
-            title: "Snapdragon X75 Chipset",
-            desc: "Supports 5G RedCap and NTN for excellent signal penetration and stable connection."
-          },
-          {
-            title: "Minimal Compact Design",
-            desc: "Wearable and lightweight, built for professional and agile operations."
-          }
+          { title: "1080p H.265 Transmission", desc: "Real-time HD visuals with ultra-low latency for an unmatched flight experience." },
+          { title: "Snapdragon X75 Chipset", desc: "Supports 5G RedCap and NTN for excellent signal penetration and stable connection." },
+          { title: "Minimal Compact Design", desc: "Wearable and lightweight, built for professional and agile operations." }
         ]
       }
     };
@@ -190,7 +180,7 @@
       t.features.forEach(f => {
         const div = document.createElement("div");
         div.className = "feature";
-        div.innerHTML = <h3>${f.title}</h3><p>${f.desc}</p>;
+        div.innerHTML = `<h3>${f.title}</h3><p>${f.desc}</p>`;
         featureContainer.appendChild(div);
       });
     }
