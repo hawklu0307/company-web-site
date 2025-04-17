@@ -21,7 +21,7 @@
 
   <link rel="icon" href="https://www.stinger.com.tw/favicon.ico" type="image/x-icon">
 
-  <!-- ⭐️ HTTPS + WWW 自動跳轉 -->
+  <!-- ⭐️ 強制 HTTPS + WWW -->
   <script>
     if (location.protocol !== 'https:' || !location.hostname.startsWith('www.')) {
       location.href = 'https://www.stinger.com.tw' + location.pathname + location.search + location.hash;
@@ -51,25 +51,33 @@
       height: 100vh;
       width: 100%;
       overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
     }
     .hero iframe {
       position: absolute;
+      top: 0;
+      left: 0;
       width: 100%;
       height: 100%;
-      border: none;
+      min-height: 100vh;
+      pointer-events: none; /* ⭐ 防止蓋住文字 */
       z-index: 0;
+      object-fit: cover;
     }
     .hero-overlay {
       position: relative;
       z-index: 1;
-      height: 100%;
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      backdrop-filter: brightness(50%);
+      height: 100%;
       padding: 1rem;
       text-align: center;
+      backdrop-filter: brightness(50%);
+      background-color: rgba(0, 0, 0, 0.4); /* fallback for iOS */
     }
     .hero-logo {
       width: 150px;
@@ -124,7 +132,6 @@
       padding: 2rem 1rem;
       font-size: 0.9rem;
       color: #666;
-      margin-top: 3rem;
     }
     .footer-content a {
       color: #999;
@@ -152,9 +159,11 @@
 
   <section class="hero">
     <iframe
-      src="https://www.youtube.com/embed/8KgyedANRTg?autoplay=1&mute=1&loop=1&playlist=8KgyedANRTg&controls=0&modestbranding=1&showinfo=0"
+      src="https://www.youtube.com/embed/8KgyedANRTg?autoplay=1&mute=1&loop=1&playlist=8KgyedANRTg&controls=0&modestbranding=1&showinfo=0&playsinline=1"
+      frameborder="0"
       allow="autoplay; fullscreen; encrypted-media; picture-in-picture"
       allowfullscreen
+      playsinline
     ></iframe>
 
     <div class="hero-overlay fade-in">
@@ -228,11 +237,9 @@
         featureContainer.appendChild(div);
       });
 
-      // 更新 Footer
       document.getElementById("footer-copyright").innerHTML = t.footer.copyright;
       document.getElementById("footer-contact").innerHTML = t.footer.contact;
 
-      // 讓新產生的元素也有動畫
       document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
     }
 
@@ -243,7 +250,6 @@
 
     renderContent();
 
-    // Intersection Observer：動畫觸發
     const observer = new IntersectionObserver(entries => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
