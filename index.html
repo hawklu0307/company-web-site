@@ -4,7 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Stinger 無人機</title>
-
   <style>
     body {
       margin: 0;
@@ -12,6 +11,7 @@
       background-color: black;
       color: white;
     }
+
     .lang-toggle {
       position: absolute;
       top: 1rem;
@@ -23,19 +23,21 @@
       font-size: 1rem;
       cursor: pointer;
     }
+
     .hero {
       position: relative;
       height: 100vh;
       width: 100%;
       overflow: hidden;
     }
+
     .hero iframe {
       position: absolute;
       width: 100%;
       height: 100%;
-      border: none;
       z-index: 0;
     }
+
     .hero-overlay {
       position: relative;
       z-index: 1;
@@ -48,21 +50,25 @@
       padding: 1rem;
       text-align: center;
     }
+
     .hero-logo {
       width: 150px;
       height: auto;
       margin-bottom: 2rem;
     }
+
     .hero-title {
       font-size: 3rem;
       font-weight: bold;
       margin-bottom: 1rem;
     }
+
     .hero-subtitle {
       font-size: 1.2rem;
       color: #ccc;
       max-width: 600px;
     }
+
     .cta-button {
       margin-top: 2rem;
       padding: 0.8rem 1.5rem;
@@ -73,10 +79,12 @@
       font-size: 1rem;
       transition: all 0.3s ease;
     }
+
     .cta-button:hover {
       background: white;
       color: black;
     }
+
     .features {
       background: #111;
       padding: 3rem 2rem;
@@ -84,20 +92,23 @@
       grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
       gap: 2rem;
     }
+
     .feature {
       color: white;
     }
+
     .feature h3 {
       font-size: 1.2rem;
       margin-bottom: 0.5rem;
     }
+
     .feature p {
       color: #aaa;
       font-size: 0.9rem;
     }
   </style>
 
-  <!-- ⭐️ 加入優化1：自動跳轉 https + www ⭐️ -->
+  <!-- ⭐️ 加入優化1：強制跳轉到 https + www ⭐️ -->
   <script>
     if (location.protocol !== 'https:' || !location.hostname.startsWith('www.')) {
       location.href = 'https://www.stinger.com.tw' + location.pathname + location.search + location.hash;
@@ -112,6 +123,7 @@
   <section class="hero">
     <iframe
       src="https://www.youtube.com/embed/8KgyedANRTg?autoplay=1&mute=1&loop=1&playlist=8KgyedANRTg&controls=0&modestbranding=1&showinfo=0"
+      frameborder="0"
       allow="autoplay; fullscreen; encrypted-media; picture-in-picture"
       allowfullscreen
     ></iframe>
@@ -119,13 +131,13 @@
     <div class="hero-overlay">
       <img src="logo.png" alt="Stinger Logo" class="hero-logo" />
       <h1 class="hero-title" id="hero-title">STINGER 無人機</h1>
-      <p class="hero-subtitle" id="hero-subtitle">高速影像傳輸．極致輕巧設計．次世代 5G NTN 技術</p>
+      <p class="hero-subtitle" id="hero-subtitle">高速影像傳輸．極致緊湊設計．次世代 5G NTN 技術</p>
       <button class="cta-button" id="cta-button">了解更多</button>
     </div>
   </section>
 
   <section class="features" id="features">
-    <!-- Features will be dynamically injected by JS -->
+    <!-- Features will be inserted by JS -->
   </section>
 
   <script>
@@ -168,7 +180,7 @@
       t.features.forEach(f => {
         const div = document.createElement("div");
         div.className = "feature";
-        div.innerHTML = <h3>${f.title}</h3><p>${f.desc}</p>;
+        div.innerHTML = `<h3>${f.title}</h3><p>${f.desc}</p>`;
         featureContainer.appendChild(div);
       });
     }
