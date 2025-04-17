@@ -3,36 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>STINGER 無人機｜高速影像傳輸｜5G NTN 技術｜超輕巧設計</title>
-
-  <!-- ⭐ SEO 必備 -->
-  <meta name="description" content="STINGER 無人機，支援1080p H.265圖傳、5G NTN、RedCap技術，極致輕巧，打造下一代專業無人機標準。">
-  <meta name="keywords" content="Stinger Drone, 無人機, 5G NTN, H.265影像傳輸, RedCap, 穿戴式無人機">
-  <meta name="author" content="Stinger Drone Team">
-
-  <!-- ⭐ Open Graph 分享 -->
-  <meta property="og:title" content="STINGER 無人機｜5G NTN超輕巧設計">
-  <meta property="og:description" content="支援1080p H.265圖傳，結合5G RedCap與NTN技術，打造無與倫比的飛行體驗。">
-  <meta property="og:image" content="https://www.stinger.com.tw/og-image.jpg">
-  <meta property="og:url" content="https://www.stinger.com.tw">
-  <meta property="og:type" content="website">
-
-  <!-- ⭐ Twitter Card -->
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="STINGER 無人機｜5G NTN超輕巧設計">
-  <meta name="twitter:description" content="支援1080p H.265圖傳，結合5G RedCap與NTN技術，打造無與倫比的飛行體驗。">
-  <meta name="twitter:image" content="https://www.stinger.com.tw/og-image.jpg">
-
-  <!-- ⭐ Favicon -->
-  <link rel="icon" href="https://www.stinger.com.tw/favicon.ico" type="image/x-icon">
-
-  <!-- ⭐ 強制 HTTPS + www -->
-  <script>
-    if (location.protocol !== 'https:' || !location.hostname.startsWith('www.')) {
-      location.href = 'https://www.stinger.com.tw' + location.pathname + location.search + location.hash;
-    }
-  </script>
-
+  <title>Stinger 無人機</title>
   <style>
     body {
       margin: 0;
@@ -40,6 +11,7 @@
       background-color: black;
       color: white;
     }
+
     .lang-toggle {
       position: absolute;
       top: 1rem;
@@ -51,19 +23,21 @@
       font-size: 1rem;
       cursor: pointer;
     }
+
     .hero {
       position: relative;
       height: 100vh;
       width: 100%;
       overflow: hidden;
     }
+
     .hero iframe {
       position: absolute;
       width: 100%;
       height: 100%;
-      border: none;
       z-index: 0;
     }
+
     .hero-overlay {
       position: relative;
       z-index: 1;
@@ -76,21 +50,25 @@
       padding: 1rem;
       text-align: center;
     }
+
     .hero-logo {
       width: 150px;
       height: auto;
       margin-bottom: 2rem;
     }
+
     .hero-title {
       font-size: 3rem;
       font-weight: bold;
       margin-bottom: 1rem;
     }
+
     .hero-subtitle {
       font-size: 1.2rem;
       color: #ccc;
       max-width: 600px;
     }
+
     .cta-button {
       margin-top: 2rem;
       padding: 0.8rem 1.5rem;
@@ -101,10 +79,12 @@
       font-size: 1rem;
       transition: all 0.3s ease;
     }
+
     .cta-button:hover {
       background: white;
       color: black;
     }
+
     .features {
       background: #111;
       padding: 3rem 2rem;
@@ -112,31 +92,22 @@
       grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
       gap: 2rem;
     }
+
     .feature {
       color: white;
     }
+
     .feature h3 {
       font-size: 1.2rem;
       margin-bottom: 0.5rem;
     }
+
     .feature p {
       color: #aaa;
       font-size: 0.9rem;
     }
-
-    /* ⭐ Animation: Fade-in效果 */
-    .fade-in {
-      opacity: 0;
-      transform: translateY(30px);
-      transition: all 1s ease;
-    }
-    .fade-in.show {
-      opacity: 1;
-      transform: translateY(0);
-    }
   </style>
 </head>
-
 <body>
 
   <button class="lang-toggle" onclick="toggleLanguage()">EN</button>
@@ -144,20 +115,21 @@
   <section class="hero">
     <iframe
       src="https://www.youtube.com/embed/8KgyedANRTg?autoplay=1&mute=1&loop=1&playlist=8KgyedANRTg&controls=0&modestbranding=1&showinfo=0"
-      allow="autoplay; fullscreen; encrypted-media; picture-in-picture"
+      frameborder="0"
+      allow="autoplay; fullscreen"
       allowfullscreen
     ></iframe>
 
-    <div class="hero-overlay fade-in">
-      <img src="logo.png" alt="Stinger Logo" class="hero-logo fade-in" />
-      <h1 class="hero-title fade-in" id="hero-title">STINGER 無人機</h1>
-      <p class="hero-subtitle fade-in" id="hero-subtitle">高速影像傳輸．極致輕巧設計．次世代 5G NTN 技術</p>
-      <button class="cta-button fade-in" id="cta-button">了解更多</button>
+    <div class="hero-overlay">
+      <img src="logo.png" alt="Stinger Logo" class="hero-logo" />
+      <h1 class="hero-title" id="hero-title">STINGER 無人機</h1>
+      <p class="hero-subtitle" id="hero-subtitle">高速影像傳輸．極致輕巧設計．次世代 5G NTN 技術</p>
+      <button class="cta-button" id="cta-button">了解更多</button>
     </div>
   </section>
 
   <section class="features" id="features">
-    <!-- Features會由JS產生，每個feature也會加fade-in -->
+    <!-- Features will be inserted by JS -->
   </section>
 
   <script>
@@ -168,9 +140,18 @@
         subtitle: "高速影像傳輸．極致輕巧設計．次世代 5G NTN 技術",
         cta: "了解更多",
         features: [
-          { title: "1080p H.265 圖傳", desc: "即時高清畫面，延遲極低，無與倫比的飛行體驗。" },
-          { title: "Snapdragon X75 晶片", desc: "支援 5G RedCap 與 NTN，穿透性與連線穩定性俱佳。" },
-          { title: "極簡緊湊設計", desc: "輕巧可穿戴，專為專業任務打造的靈活平台。" }
+          {
+            title: "1080p H.265 圖傳",
+            desc: "即時高清畫面，延遲極低，無與倫比的飛行體驗。"
+          },
+          {
+            title: "Snapdragon X75 晶片",
+            desc: "支援 5G RedCap 與 NTN，穿透性與連線穩定性俱佳。"
+          },
+          {
+            title: "極簡緊湊設計",
+            desc: "輕巧可穿戴，專為專業任務打造的靈活平台。"
+          }
         ]
       },
       en: {
@@ -179,9 +160,18 @@
         subtitle: "Ultra-fast video transmission. Compact wearable design. Next-gen 5G NTN technology.",
         cta: "Learn More",
         features: [
-          { title: "1080p H.265 Transmission", desc: "Real-time HD visuals with ultra-low latency for an unmatched flight experience." },
-          { title: "Snapdragon X75 Chipset", desc: "Supports 5G RedCap and NTN for excellent signal penetration and stable connection." },
-          { title: "Minimal Compact Design", desc: "Wearable and lightweight, built for professional and agile operations." }
+          {
+            title: "1080p H.265 Transmission",
+            desc: "Real-time HD visuals with ultra-low latency for an unmatched flight experience."
+          },
+          {
+            title: "Snapdragon X75 Chipset",
+            desc: "Supports 5G RedCap and NTN for excellent signal penetration and stable connection."
+          },
+          {
+            title: "Minimal Compact Design",
+            desc: "Wearable and lightweight, built for professional and agile operations."
+          }
         ]
       }
     };
@@ -199,13 +189,10 @@
       featureContainer.innerHTML = "";
       t.features.forEach(f => {
         const div = document.createElement("div");
-        div.className = "feature fade-in";
+        div.className = "feature";
         div.innerHTML = `<h3>${f.title}</h3><p>${f.desc}</p>`;
         featureContainer.appendChild(div);
       });
-
-      // 讓新增的元素也能動畫
-      document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
     }
 
     function toggleLanguage() {
@@ -214,17 +201,6 @@
     }
 
     renderContent();
-
-    // ⭐ IntersectionObserver：進場觸發動畫
-    const observer = new IntersectionObserver(entries => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('show');
-        }
-      });
-    }, { threshold: 0.1 });
-
-    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
   </script>
 </body>
 </html>
