@@ -3,7 +3,35 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Stinger 無人機</title>
+  <title>STINGER 無人機｜高速影像傳輸｜5G NTN 技術｜超輕巧設計</title>
+
+  <!-- ⭐ SEO 必備 -->
+  <meta name="description" content="STINGER 無人機，支援1080p H.265圖傳、5G NTN、RedCap技術，極致輕巧，打造下一代專業無人機標準。">
+  <meta name="keywords" content="Stinger Drone, 無人機, 5G NTN, H.265影像傳輸, RedCap, 穿戴式無人機">
+  <meta name="author" content="Stinger Drone Team">
+
+  <!-- ⭐ Open Graph 分享 -->
+  <meta property="og:title" content="STINGER 無人機｜5G NTN超輕巧設計">
+  <meta property="og:description" content="支援1080p H.265圖傳，結合5G RedCap與NTN技術，打造無與倫比的飛行體驗。">
+  <meta property="og:image" content="https://www.stinger.com.tw/og-image.jpg">
+  <meta property="og:url" content="https://www.stinger.com.tw">
+  <meta property="og:type" content="website">
+
+  <!-- ⭐ Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="STINGER 無人機｜5G NTN超輕巧設計">
+  <meta name="twitter:description" content="支援1080p H.265圖傳，結合5G RedCap與NTN技術，打造無與倫比的飛行體驗。">
+  <meta name="twitter:image" content="https://www.stinger.com.tw/og-image.jpg">
+
+  <!-- ⭐ Favicon -->
+  <link rel="icon" href="https://www.stinger.com.tw/favicon.ico" type="image/x-icon">
+
+  <!-- ⭐ 強制 HTTPS + www -->
+  <script>
+    if (location.protocol !== 'https:' || !location.hostname.startsWith('www.')) {
+      location.href = 'https://www.stinger.com.tw' + location.pathname + location.search + location.hash;
+    }
+  </script>
 
   <style>
     body {
@@ -95,14 +123,18 @@
       color: #aaa;
       font-size: 0.9rem;
     }
-  </style>
 
-  <!-- ⭐️ 加入優化1：自動跳轉 https + www ⭐️ -->
-  <script>
-    if (location.protocol !== 'https:' || !location.hostname.startsWith('www.')) {
-      location.href = 'https://www.stinger.com.tw' + location.pathname + location.search + location.hash;
+    /* ⭐ Animation: Fade-in效果 */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 1s ease;
     }
-  </script>
+    .fade-in.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
 </head>
 
 <body>
@@ -116,16 +148,16 @@
       allowfullscreen
     ></iframe>
 
-    <div class="hero-overlay">
-      <img src="logo.png" alt="Stinger Logo" class="hero-logo" />
-      <h1 class="hero-title" id="hero-title">STINGER 無人機</h1>
-      <p class="hero-subtitle" id="hero-subtitle">高速影像傳輸．極致輕巧設計．次世代 5G NTN 技術</p>
-      <button class="cta-button" id="cta-button">了解更多</button>
+    <div class="hero-overlay fade-in">
+      <img src="logo.png" alt="Stinger Logo" class="hero-logo fade-in" />
+      <h1 class="hero-title fade-in" id="hero-title">STINGER 無人機</h1>
+      <p class="hero-subtitle fade-in" id="hero-subtitle">高速影像傳輸．極致輕巧設計．次世代 5G NTN 技術</p>
+      <button class="cta-button fade-in" id="cta-button">了解更多</button>
     </div>
   </section>
 
   <section class="features" id="features">
-    <!-- Features will be dynamically injected by JS -->
+    <!-- Features會由JS產生，每個feature也會加fade-in -->
   </section>
 
   <script>
@@ -167,10 +199,13 @@
       featureContainer.innerHTML = "";
       t.features.forEach(f => {
         const div = document.createElement("div");
-        div.className = "feature";
+        div.className = "feature fade-in";
         div.innerHTML = `<h3>${f.title}</h3><p>${f.desc}</p>`;
         featureContainer.appendChild(div);
       });
+
+      // 讓新增的元素也能動畫
+      document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
     }
 
     function toggleLanguage() {
@@ -179,6 +214,17 @@
     }
 
     renderContent();
+
+    // ⭐ IntersectionObserver：進場觸發動畫
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('show');
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
   </script>
 </body>
 </html>
