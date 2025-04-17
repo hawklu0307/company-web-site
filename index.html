@@ -134,6 +134,23 @@
       opacity: 1;
       transform: translateY(0);
     }
+
+    .footer {
+      background-color: #000; /* 黑色底 */
+      padding: 2rem 1rem;
+      text-align: center;
+      font-size: 0.9rem;
+      color: #666;
+    }
+
+    .footer-content a {
+      color: #999;
+      text-decoration: none;
+    }
+
+    .footer-content a:hover {
+      color: #fff;
+    }
   </style>
 </head>
 
@@ -226,5 +243,11 @@
 
     document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
   </script>
+  <footer class="footer">
+    <div class="footer-content">
+      <p>© 2025 Stinger Drone. All rights reserved.</p>
+      <p>Contact: <a href="mailto:sales@stinger.com.tw">sales@stinger.com.tw</a></p>
+    </div>
+  </footer>
 </body>
 </html>
