@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <!--<meta name='viewport' content='width=320'>-->
+    <link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css'>
+    <script src='https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js'></script>
+    <script src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js'></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js'></script>
+    <link rel='shortcut icon' type='image/png' href='/media/images/favicon.png'>
+    <link rel='alternate' type='application/rss+xml' title='RSS 2.0' href='https://www.datatables.net/rss.xml'>
+    <link rel='stylesheet' type='text/css' href='/media/css/site-examples.css?_=19472395a2969da78c8a4c707e72123a'>
+    <link rel='stylesheet' type='text/css' href='https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css'>
+    <link rel='stylesheet' type='text/css' href='https://cdn.datatables.net/fixedcolumns/3.2.6/css/fixedColumns.dataTables.min.css'>
+    
+    <script type='text/javascript' src='/media/js/site.js?_=5e8f232afab336abc1a1b65046a73460'></script>
+    <script type='text/javascript' src='/media/js/dynamic.php?comments-page=extensions%2Ffixedcolumns%2Fexamples%2Finitialisation%2Fsimple.html' async></script>
+    <script type='text/javascript' language='javascript' src='https://code.jquery.com/jquery-3.3.1.js'></script>
+    <script type='text/javascript' language='javascript' src='https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js'></script>
+    <script type='text/javascript' language='javascript' src='https://cdn.datatables.net/fixedcolumns/3.2.6/js/dataTables.fixedColumns.min.js'></script>
+    <script type='text/javascript' language='javascript' src='../../../../examples/resources/demo.js'></script>
+    <script type='text/javascript' class='init'>
+
+        //定義全域變數
+        var spreadsheets_key_old="1OlRh_KFHYMne4evLrF5fIkOj5x12at6DPGdJqIGqh8g";
+        var spreadsheets_key="1DOe0bNdcsoS4i2R1BZxQ_qaWKh2vRGdnyrsJBN-kqf8";
+        var competition_status=new Array();//比賽基本資料庫
+        var competition_sequence=new Array();//最後比賽順序資料庫
+        var all_pilot_list=new Array();//所有會員清單
+        var f3f_record=new Array();//所有比賽紀錄
+        var news=new Array();//所有新聞發布
+        var record=new Array();//所有比賽紀錄
+        var login_result=0;//宣告登入旗標
+        
+        //開始讀取雲端資料, 共有四個資料庫
+        $.getJSON("https://spreadsheets.google.com/feeds/list/"+spreadsheets_key+"/1/public/values?alt=json", function( data ) {
+            for(var i=0;i<data.feed.entry.length;i++)competition_status.push({ Competition_ID: data.feed.entry[i].gsx$competitionid.$t, Date: data.feed.entry[i].gsx$date.$t, Pilot_Quantity: data.feed.entry[i].gsx$pilotquantity.$t, Round_Status: data.feed.entry[i].gsx$roundstatus.$t, Sequence_Status: data.feed.entry[i].gsx$sequencestatus.$t, Competition_Status:data.feed.entry[i].gsx$competitionstatus.$t});
+            //for(var i=0;i<competition_status.length;i++)document.write("Competition_ID"+competition_status[i].Competition_ID+",Date="+competition_status[i].Date+",Pilot_Quantity="+competition_status[i].Pilot_Quantity+",Round_Status="+competition_status[i].Round_Status+",Sequence_Status="+competition_status[i].Sequence_Status+",Competition_Status="+competition_status[i].Competition_Status+"</br>");
+            $.getJSON("https://spreadsheets.google.com/feeds/list/"+spreadsheets_key+"/3/public/values?alt=json", function( data ) {
+                for(var i=0;i<data.feed.entry.length;i++)all_pilot_list.push({ id: data.feed.entry[i].gsx$pilotid.$t, name: data.feed.entry[i].gsx$pilotname.$t});
+                //for(var i=0;i<all_pilot_list.length;i++)document.write(all_pilot_list[i].id+all_pilot_list[i].name+"</br>");
+                $.getJSON("https://spreadsheets.google.com/feeds/list/"+spreadsheets_key+"/4/public/values?alt=json", function( data ) {
+                    for(var i=0;i<data.feed.entry.length;i++)f3f_record.push({UNIQUE_ID: data.feed.entry[i].gsx$uniqueid.$t, Date:data.feed.entry[i].gsx$date.$t, Sequence:data.feed.entry[i].gsx$sequence.$t, Pilot_ID:data.feed.entry[i].gsx$pilotid.$t, Pilot_Name:data.feed.entry[i].gsx$pilotname.$t, Round:data.feed.entry[i].gsx$round.$t, Time:data.feed.entry[i].gsx$time.$t, Deduct:data.feed.entry[i].gsx$deduct.$t, Fly_Type:data.feed.entry[i].gsx$flytype.$t });
+                    //for(var i=0;i<f3f_record.length;i++)document.write("UNIQUE_ID="+f3f_record[i].UNIQUE_ID+",Date="+f3f_record[i].Date+",Sequence="+f3f_record[i].Sequence+",Pilot_ID="+f3f_record[i].Pilot_ID+",Pilot_Name="+f3f_record[i].Pilot_Name+",Round="+f3f_record[i].Round,",Time="+f3f_record[i].Time,"sec,Deduct="+f3f_record[i].Deduct,"</br>");
+                        //if (f3f_record[i].Fly_Type==0)document.write("Fly_Type=Normal fly</br>");
+                        //else document.write("Fly_Type=re-fly</br>");
+                    $.getJSON("https://spreadsheets.google.com/feeds/list/"+spreadsheets_key+"/2/public/values?alt=json", function( data ) {
+                        for(var i=0;i<data.feed.entry.length;i++)competition_sequence.push({ Index: data.feed.entry[i].gsx$index.$t, Sequence: data.feed.entry[i].gsx$sequence.$t, Pilot_ID:data.feed.entry[i].gsx$pilotid.$t});
+                        //for(var i=0;i<competition_sequence.length;i++)document.write("Index="+competition_sequence[i].Index+",Sequence="+competition_sequence[i].Sequence+",Pilot_ID=",+competition_sequence[i].Pilot_ID+"</br>");
+                        competition_status.reverse()//反轉排序
+                
+                        for(var i=0;i<competition_status.length;i++)//寫入下拉式選單
+                        {
+                            document.getElementById("match_id_select").options.add(new Option(competition_status[i].Date,competition_status[i].Competition_ID));
+                        }
+                        show_scoreboard(0);//傳入最新比賽回合(因為反轉排序過)=0
+                    });
+                });
+            });
+        });
+
+        $.getJSON("https://spreadsheets.google.com/feeds/list/"+spreadsheets_key+"/5/public/values?alt=json", function( data ) {
+            for(var i=0;i<data.feed.entry.length;i++)news.push({ News_ID: data.feed.entry[i].gsx$newsid.$t, Date: data.feed.entry[i].gsx$date.$t, Title:data.feed.entry[i].gsx$title.$t, Description:data.feed.entry[i].gsx$description.$t});
+            news.reverse()//反轉排序
+            show_news("news_message");
+        });
+
+        //顯示新聞主程式
+        function show_news(message)
+        {   
+            var div1 = document.getElementById(message);//宣告物件
+            var code="";//宣告輸出code空字串
+
+            for (var i=0;i<news.length;i++)
+            {
+                code +='<div class="panel panel-default">';
+                code +='<div class="panel-heading">';
+                code +='發布日期：';
+                code += news[i].Date;
+                code +='</br>主旨：';
+                code += news[i].Title;
+                code +='</br></div>';
+
+                code +='<div class="panel-body">';
+                code +=news[i].Description;
+                code +='</div>';
+                code +='</div>';
+                div1.innerHTML = code;//輸出code到news_message
+            }
+        }
+
+        //顯示分數板主程式
+        function show_scoreboard(competition_id)
+        {   //區域定義變數
+            var round=competition_status[competition_id].Round_Status;//取得比賽回合數
+            var pilot_number=competition_status[competition_id].Pilot_Quantity;//取得比賽人數
+
+            //組合顯示用訊息
+            var competition_message="";//="比賽人數="+competition_status[competition_id].Pilot_Quantity;
+            //competition_message+=", 比賽回合數="+competition_status[competition_id].Round_Status;
+            if(competition_status[competition_id].Competition_Status==1)competition_message+="<font color=green>比賽狀態:比賽中</font>";
+                else if (competition_status[competition_id].Competition_Status==2)competition_message+="<font color=red>比賽狀態:比賽暫停</font>";
+                else competition_message+="<font color=blue>比賽狀態:比賽完成</font>";
+            document.getElementById("match_status").innerHTML=competition_message;
+
+            //按照使用者選擇來篩選日期
+            var buffer = f3f_record.filter(function(item, index, array){return item.Date == competition_status[competition_id].Date;});
+            
+            //開始計算成績
+            $(buffer).attr("Score");//添加score屬性
+
+            var score=new Array(pilot_number);//宣告陣列儲存每個Round成績用, 第一維飛行員人數
+            for(var i=0;i<pilot_number;i++){score[i]=new Array(round);//宣告第二維陣列Round
+                    for(var j=0;j<round;j++){score[i][j]=new Array(3);}}//宣告第三維陣列Time/Score/Dudct
+
+            var total_score=new Array(pilot_number);//宣告陣列儲存total成績用, 第一維飛行員人數
+            for(var i=0;i<pilot_number;i++){total_score[i]=new Array(8);}//宣告第二維陣列/sequence/total1/rank1/discard1/discard2/deduct/total2/rank2
+           
+            //計算主迴圈
+            for(var j=0;j<round;j++)
+            {
+                var round_score=buffer.filter(function(item, index, array){return item.Round == j+1;});//篩選回合
+                for (var i=0;i<pilot_number;i++)
+                {
+                    if((round_score[i].Time)==""){round_score[i].Time=8888}//空白填入未飛行代碼8888
+                }
+                round_score.sort(function (a, b) {return a.Time-b.Time});//排序找出最快的1000分
+                var best_time=round_score[0].Time;//計錄回合最短秒數
+                round_score.sort(function (a, b) {return a.Sequence-b.Sequence});//回到原排序
+
+                for (var i=0;i<pilot_number;i++)
+                {	
+                    if(round_score[i].Time==9999){score[i][j][0]="x";score[i][j][1]=0;}//DNF零分
+                    else if(round_score[i].Time==7777){score[i][j][0]="-";score[i][j][1]=0;}//DNS零分
+                    else if(round_score[i].Time==8888){score[i][j][0]="-";score[i][j][1]=0;}//尚未飛行先填"-"
+                    else{score[i][j][0]=round_score[i].Time;score[i][j][1]=best_time/score[i][j][0]*1000;}//開始計算分數,複製Time至score
+                    
+                    score[i][j][2]=round_score[i].Deduct;//複製Deduct至score
+                    
+                    total_score[i][0]=i+1;//給定sequence
+                    if(isNaN(total_score[i][1])==true){total_score[i][1]=0;}//NaN時給定0初始值
+                    total_score[i][1]+=score[i][j][1];//計算total1
+                }
+            }
+            
+            var discard_buffer=new Array(round);//計算discard1/discard2使用
+
+            for (var j = 0; j < pilot_number; j++)//計算discard1/discard2
+                {	
+                    for (var i = 0; i < round; i++)
+                        {
+                            discard_buffer[i]=score[j][i][1];//存入個人成績
+                            if(isNaN(total_score[j][5])==true){total_score[j][5]=0;}//NaN時給定0初始值
+                            total_score[j][5]+=score[j][i][2];//計算deduct
+                        }
+                    discard_buffer.sort(function(a,b) {return a-b});//排序個人成績
+                    total_score[j][3]=discard_buffer[0];//存入discard1
+                    total_score[j][4]=discard_buffer[1];//存入discard2
+
+                    if(round>14)//計算total2, 超過14回合扣2場, 超過3回合扣1場
+                    {
+                        total_score[j][6]=total_score[j][1]-total_score[j][3]-total_score[j][4];
+                    }
+                    else if(round>3)
+                    {
+                        total_score[j][6]=total_score[j][1]-total_score[j][3];
+                    }
+                    else
+                    {
+                        total_score[j][6]=total_score[j][1];
+                    }
+                }
+
+
+            total_score.sort(function(a,b) {return a[1]-b[1]});//排序成績
+            for (var i = 0; i < pilot_number; i++)//寫入rank1排名
+            {
+                total_score[i][2]=pilot_number-i;
+            }
+            total_score.sort(function(a,b) {return a[6]-b[6]});//排序成績
+            for (var i = 0; i < pilot_number; i++)//寫入rank2排名
+            {
+                total_score[i][7]=pilot_number-i;
+            }
+            total_score.sort(function(a,b) {return a[0]-b[0]});//排回原順序
+
+            //宣告最終輸出Table
+            var score_board=new Array(pilot_number);
+            for(var i=0;i<pilot_number;i++){score_board[i]=new Array(2+round*3+7);}//宣告第二維陣列(No./Pilot_Name)+Round*(Time/Score/Dudct)+(total1/rank1/discard1/discard2/deduct/total2/rank2)
+            
+            //開始輸出資料
+            for (var i = 0; i < pilot_number; i++)
+                {       
+                        for (var j = 0; j < round; j++)
+                            {
+                                round_score = buffer.filter(function(item, index, array){return item.Round == j+1;});//篩選回合
+
+                                if (j==0)
+                                    {
+                                        score_board[i][0]=round_score[i].Sequence;
+                                        score_board[i][1]=round_score[i].Pilot_Name;
+                                    }
+                                score_board[i][j*3+2]=score[i][j][0];
+                                score_board[i][j*3+3]=score[i][j][1].toFixed(2);
+                                score_board[i][j*3+4]=score[i][j][2];
+
+                            }
+                        score_board[i][(round-1)*3+5]=total_score[i][1].toFixed(2);//total1
+                        score_board[i][(round-1)*3+6]=total_score[i][2];//rank1
+
+                        
+                        if(round>14)//超過14回合扣除最低2回合成績
+                        {
+                            score_board[i][(round-1)*3+7]=total_score[i][3].toFixed(2);//discard1
+                            score_board[i][(round-1)*3+8]=total_score[i][4].toFixed(2);///discard2
+                            score_board[i][(round-1)*3+9]=total_score[i][5];//deduct
+                            score_board[i][(round-1)*3+10]=total_score[i][6].toFixed(2);//total2
+                            score_board[i][(round-1)*3+11]=total_score[i][7];//rank2
+                        }
+                        else if(round>3)//超過3回合扣除最低1回合成績
+                        {
+                            score_board[i][(round-1)*3+7]=total_score[i][3].toFixed(2);//discard1
+                            score_board[i][(round-1)*3+8]=total_score[i][5];//deduct
+                            score_board[i][(round-1)*3+9]=total_score[i][6].toFixed(2);//total2
+                            score_board[i][(round-1)*3+10]=total_score[i][7];//rank2
+                        }
+                        else//三回合以下不扣除
+                        {
+                            score_board[i][(round-1)*3+7]=total_score[i][5];//deduct
+                            score_board[i][(round-1)*3+8]=total_score[i][6].toFixed(2);//total2
+                            score_board[i][(round-1)*3+9]=total_score[i][7];//rank2
+                        }
+
+                }
+
+            output_table_header(round);//將表頭輸出到table
+            output_table(score_board);//將分數板數據輸出到table
+        }
+
+        //將表頭輸出到table
+        function output_table_header(round)
+        {
+            //宣告變數給表頭使用
+            var div1 = document.getElementById('table_output');
+            //第一行表頭
+            var code1 = "";
+
+            code1    += "<tr>";
+            code1    += "<th colspan=2>Pilot</th>";
+            for (var i = 0; i < round; i++) {code1+="<th colspan=3>Round"+(i+1)+"</th>"};
+            code1    += "<th colspan=2>Before adjust</th>"
+            if(round>3){code1    += "<th rowspan=2>Discard1</th>"}
+            if(round>14){code1    += "<th rowspan=2>Discard2</th>"}
+            code1    += "<th rowspan=2>Total<br>Deduct</th>"
+            code1    += "<th colspan=2>After adjust</th>"
+            code1    += "</tr>"
+
+            //第二行與底行表頭
+            var code2 = "";
+            code2    += "<tr>"
+            for (var i = 0; i < round; i++)
+                {
+                    if (i==0)
+                        {
+                            code2    +="<th>No.</th>";
+                            code2    +="<th>Name</th>";
+                            code2    +="<th>Time</th>";
+                            code2    +="<th>Score</th>";
+                            code2    +="<th>Deduct</th>";
+                        }
+                    if (i==round-1)
+                        {
+                            code2    +="<th>Total</th>";
+                            code2    +="<th>Rank</th>";
+                            code2    +="<th>Total</th>";
+                            code2    +="<th>Rank</th>";
+                        }
+                    else
+                        {
+                            code2    +="<th>Time</th>";
+                            code2    +="<th>Score</th>";
+                            code2    +="<th>Deduct</th>";
+                        }
+                }
+                code2    +="</tr>";
+
+                code1    +="<thead>" + code1 + code2 + "</thead>"+"<tfoot>" + code1 + code2 + "</tfoot>";
+
+            div1.innerHTML = code1;//輸出表頭到table_output
+        }
+
+        //將分數板數據輸出到table
+        function output_table(score_board)
+        {
+            //顯示RWD表格
+            $(document).ready(function() {
+                table = $('#table_output').DataTable( {
+                    data: score_board,
+                    fixedColumns: { leftColumns: 2 },//凍結兩列
+                    "scrollX": true,
+                    "scrollY": true,
+                    "paging": false,
+                    "ordering": true,
+                    "info": false,
+                } );
+            } );
+        }
+
+        //重新顯示分數板
+        function reload_scoreboard(i)
+        {
+            var div1 = document.getElementById('table_header');
+            table.destroy();//報廢表格DOM
+            $('#table_output').empty();//清除輸出區域
+            show_scoreboard(i);//重新顯示
+        }
+
+        //RWD視窗大小變動時, 執行相應的調整, 目前只有顯示數值
+        $(document).ready(function(){
+            $(window).resize(function() {
+                var wdth=$(window).width();
+                var hght=$(window).height();
+                var foot_message="視窗寬度="+wdth+", 視窗高度="+hght;
+                //document.getElementById('output_footer').innerText=foot_message;
+            });
+        });
+        
+        $(function(){ 
+            if($(window).width()<480){ //當視窗小於480時才運作
+                $('.navbar a').on('click', function(){
+                    if($(this).attr("data-toggle") == "tab")//當選中後關閉,沒有下一層時
+                    {
+                        $('.navbar-toggle').click();    
+                    }
+                });
+            }
+        });
+
+    </script>
+
+    <style>
+        body{color:black; background:rgb(255, 255, 255); padding-top: 70px;}
+
+        /* Ensure that the demo table scrolls */
+        th, td { white-space: nowrap; }
+            div.dataTables_wrapper {
+                width: auto;
+                margin: auto;
+            }
+        .google-maps {
+            position: relative;
+            padding-bottom: 75%;
+            overflow: hidden;
+        }
+        .google-maps iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100% !important;
+            height: 100% !important;
+        }
+
+
+    </style>
+</head>
+
+<body>
+    <header>
+
+    </header>
+    
+    <nav class="navbar navbar-default navbar-fixed-top navbar-dark bg-dark" role="navigation">
+        <div class="container-fluid" >
+            <div class="navbar-header">
+                <a class="navbar-brand" href="https://ncfirdkzmccg4ldllofhig.on.drv.tw/F3F%20Competition/">F3F_Competition_System</a>            
+                <button id="button" type="button" class="navbar-toggle collapses" data-toggle="collapse" data-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="sr-only">導覽按鈕</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                </button>
+
+                <script language="javascript" type="text/javascript">
+
+                </script>
+
+            </div>
+            <div id="navbar" class="navbar-collapse collapse">      
+                <ul class="nav navbar-nav">
+
+                    <li id="news_li" class="active"><a data-toggle="tab"  href="#news">比賽新聞</a></li>
+                    <li><a data-toggle="tab"  href="#inquiry">比賽資料查詢</a></li>
+                    <li><a data-toggle="tab"  href="#windguru">風況預報</a></li>
+                    <li><a data-toggle="tab"  href="#wind">即時風況</a></li>
+                    <li><a data-toggle="tab"  href="#radar">雷達圖</a></li>
+                </ul>
+            </div>     
+        </div>     
+    </nav>
+
+
+    <article>
+        <div class="container tab-content">
+            <div id="news" class="tab-pane fade in active">
+                <h3>比賽新聞與比賽公告</h3>
+                <label id="news_message"></label>
+                </br></br>
+            </div>
+
+            <div id="inquiry" class="tab-pane fade">
+                    <h3>成績查詢(可以查詢正在比賽的成績或者歷史資料)</h3>
+                    <label>比賽場次:</label><select id="match_id_select" onchange="reload_scoreboard(competition_status.length-this.value)"></select>
+                    <label id="match_status">目前狀態為:</label>
+                    <!--<button type="button" class="btn btn-primary btn-lg" onClick="window.location.reload()">刷新</button>-->
+                    <table id="table_output" class="stripe row-border order-column" style="width:auto"></table>
+            </div>   
+            <div id="windguru" class="tab-pane fade">
+                    <h3>風況預報</h3>
+                    <h3>潮境公園</h3>
+                    <script id="wg_fwdg_993090_100_1615654023712">
+                    (function (window, document) {
+                      var loader = function () {
+                        var arg = ["s=993090" ,"m=100","uid=wg_fwdg_993090_100_1615654023712" ,"wj=msd" ,"tj=c" ,"waj=m" ,"odh=0" ,"doh=24" ,"fhours=240" ,"hrsm=2" ,"vt=forecasts" ,"lng=zht" ,"idbs=1" ,"p=WINDSPD,GUST,SMER,TMPE,FLHGT,CDC,APCP1s,RATING"];
+                        var script = document.createElement("script");
+                        var tag = document.getElementsByTagName("script")[0];
+                        script.src = "https://www.windguru.cz/js/widget.php?"+(arg.join("&"));
+                        tag.parentNode.insertBefore(script, tag);
+                      };
+                      window.addEventListener ? window.addEventListener("load", loader, false) : window.attachEvent("onload", loader);
+                    })(window, document);
+                    </script>
+                    <h3>龍潭北風場</h3>
+                    <script id="wg_fwdg_165315_100_1615652798952">
+                    (function (window, document) {
+                      var loader = function () {
+                        var arg = ["s=165315" ,"m=100","uid=wg_fwdg_165315_100_1615652798952" ,"wj=msd" ,"tj=c" ,"waj=m" ,"odh=0" ,"doh=24" ,"fhours=240" ,"hrsm=2" ,"vt=forecasts" ,"lng=zht" ,"idbs=1" ,"p=WINDSPD,GUST,SMER,TMPE,FLHGT,CDC,APCP1s,RATING"];
+                        var script = document.createElement("script");
+                        var tag = document.getElementsByTagName("script")[0];
+                        script.src = "https://www.windguru.cz/js/widget.php?"+(arg.join("&"));
+                        tag.parentNode.insertBefore(script, tag);
+                      };
+                      window.addEventListener ? window.addEventListener("load", loader, false) : window.attachEvent("onload", loader);
+                    })(window, document);
+                    </script>
+                    <h3>後龍</h3>
+                    <script id="wg_fwdg_104080_100_1615652930166">
+                    (function (window, document) {
+                      var loader = function () {
+                        var arg = ["s=104080" ,"m=100","uid=wg_fwdg_104080_100_1615652930166" ,"wj=msd" ,"tj=c" ,"waj=m" ,"odh=0" ,"doh=24" ,"fhours=240" ,"hrsm=2" ,"vt=forecasts" ,"lng=zht" ,"idbs=1" ,"p=WINDSPD,GUST,SMER,TMPE,FLHGT,CDC,APCP1s,RATING"];
+                        var script = document.createElement("script");
+                        var tag = document.getElementsByTagName("script")[0];
+                        script.src = "https://www.windguru.cz/js/widget.php?"+(arg.join("&"));
+                        tag.parentNode.insertBefore(script, tag);
+                      };
+                      window.addEventListener ? window.addEventListener("load", loader, false) : window.attachEvent("onload", loader);
+                    })(window, document);
+                    </script>
+                    <h3>鐵鉆山</h3>
+                    <script id="wg_fwdg_104081_100_1615653023057">
+                    (function (window, document) {
+                      var loader = function () {
+                        var arg = ["s=104081" ,"m=100","uid=wg_fwdg_104081_100_1615653023057" ,"wj=msd" ,"tj=c" ,"waj=m" ,"odh=0" ,"doh=24" ,"fhours=240" ,"hrsm=2" ,"vt=forecasts" ,"lng=zht" ,"idbs=1" ,"p=WINDSPD,GUST,SMER,TMPE,FLHGT,CDC,APCP1s,RATING"];
+                        var script = document.createElement("script");
+                        var tag = document.getElementsByTagName("script")[0];
+                        script.src = "https://www.windguru.cz/js/widget.php?"+(arg.join("&"));
+                        tag.parentNode.insertBefore(script, tag);
+                      };
+                      window.addEventListener ? window.addEventListener("load", loader, false) : window.attachEvent("onload", loader);
+                    })(window, document);
+                    </script>
+                    <h3>墾丁龍磐</h3>
+                    <script id="wg_fwdg_993091_100_1615654137266">
+                    (function (window, document) {
+                      var loader = function () {
+                        var arg = ["s=993091" ,"m=100","uid=wg_fwdg_993091_100_1615654137266" ,"wj=msd" ,"tj=c" ,"waj=m" ,"odh=0" ,"doh=24" ,"fhours=240" ,"hrsm=2" ,"vt=forecasts" ,"lng=zht" ,"idbs=1" ,"p=WINDSPD,GUST,SMER,TMPE,FLHGT,CDC,APCP1s,RATING"];
+                        var script = document.createElement("script");
+                        var tag = document.getElementsByTagName("script")[0];
+                        script.src = "https://www.windguru.cz/js/widget.php?"+(arg.join("&"));
+                        tag.parentNode.insertBefore(script, tag);
+                      };
+                      window.addEventListener ? window.addEventListener("load", loader, false) : window.attachEvent("onload", loader);
+                    })(window, document);
+                    </script>
+                    <h3>澎湖西嶼</h3>
+                    <script id="wg_fwdg_1196061_100_1698072889115">
+                    (function (window, document) {
+                        var loader = function () {
+                        var arg = ["s=1196061" ,"m=100","uid=wg_fwdg_1196061_100_1698072889115" ,"wj=msd" ,"tj=c" ,"waj=m" ,"tij=cm" ,"odh=0" ,"doh=24" ,"fhours=240" ,"hrsm=2" ,"vt=forecasts" ,"lng=zht" ,"idbs=1" ,"p=WINDSPD,GUST,SMER,TMPE,FLHGT,CDC,APCP1s,RATING"];
+                        var script = document.createElement("script");
+                        var tag = document.getElementsByTagName("script")[0];
+                        script.src = "https://www.windguru.cz/js/widget.php?"+(arg.join("&"));
+                        tag.parentNode.insertBefore(script, tag);
+                        };
+                        window.addEventListener ? window.addEventListener("load", loader, false) : window.attachEvent("onload", loader);
+                    })(window, document);
+                    </script>
+                    <h3>韓國黃金山</h3>
+                    <script id="wg_fwdg_1200099_100_1700545133423">
+                    (function (window, document) {
+                    var loader = function () {
+                        var arg = ["s=1200099" ,"m=100","uid=wg_fwdg_1200099_100_1700545133423" ,"wj=msd" ,"tj=c" ,"waj=m" ,"tij=cm" ,"odh=0" ,"doh=24" ,"fhours=240" ,"hrsm=2" ,"vt=forecasts" ,"lng=zht" ,"idbs=1" ,"p=WINDSPD,GUST,SMER,TMPE,FLHGT,CDC,APCP1s,RATING"];
+                        var script = document.createElement("script");
+                        var tag = document.getElementsByTagName("script")[0];
+                        script.src = "https://www.windguru.cz/js/widget.php?"+(arg.join("&"));
+                        tag.parentNode.insertBefore(script, tag);
+                    };
+                    window.addEventListener ? window.addEventListener("load", loader, false) : window.attachEvent("onload", loader);
+                    })(window, document);
+                    </script>
+                    <h3>法國Saint Ferriol</h3>
+                    <script id="wg_fwdg_1216151_3_1711908787346">
+                        (function (window, document) {
+                          var loader = function () {
+                            var arg = ["s=1216151" ,"m=3","uid=wg_fwdg_1216151_3_1711908787346" ,"wj=msd" ,"tj=c" ,"waj=m" ,"tij=m" ,"odh=0" ,"doh=24" ,"fhours=240" ,"hrsm=3" ,"vt=forecasts" ,"lng=zht" ,"p=WINDSPD,GUST,MWINDSPD,SMER,TMPE,FLHGT,CDC,APCP1s,RATING"];
+                            var script = document.createElement("script");
+                            var tag = document.getElementsByTagName("script")[0];
+                            script.src = "https://www.windguru.cz/js/widget.php?"+(arg.join("&"));
+                            tag.parentNode.insertBefore(script, tag);
+                          };
+                          window.addEventListener ? window.addEventListener("load", loader, false) : window.attachEvent("onload", loader);
+                        })(window, document);
+                    </script>
+            </div>   
+            <div id="wind" class="tab-pane fade">
+                    <h3>即時風況</h3>
+                    <div class="google-maps">
+                        <iframe src="https://earth.nullschool.net/#current/wind/surface/level/orthographic=-238.70,26.22,752" width="100%" height="100%" title="即時風況"></iframe>
+                    </div>
+            </div>
+            <div id="radar" class="tab-pane fade">
+                    <h3>雷達圖</h3>
+                    <a href="https://www.cwa.gov.tw/V8/C/W/OBS_Radar.html" title="查看更多資訊" class="cube-wrap">
+                    <img src="https://www.cwa.gov.tw/Data/radar/CV1_3600_202404010200.png" alt="雷達" class="img-responsive">
+                    
+                    </a>
+            </div>
+
+        </div>
+    </article>
+
+    <footer>
+        <div class="container"align="right">
+            <label id="output_footer"></label>
+            <label>Copyright © 2021 Hawk Lu</label>
+        </div>
+    </footer>
+</body>
+</html>
